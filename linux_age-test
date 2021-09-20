@@ -1,0 +1,25 @@
+#!/bin/bash
+
+read -p "enter your name: " name
+read -p "enter your age: " age
+read -p "enter your ale: " ale
+
+let y=65-$age
+let z=$ale-$age
+echo $name
+if [[ $age -lt 18 ]]
+then
+	let x=18-$age
+	echo "student"
+	echo "At least $x year to become a worker"
+elif [[ $age -gt 18 ]] && [[ $age -lt 65 ]]
+then
+	echo "worker"
+	echo "$y years to retire"
+elif [[ $age -ge 65  ]] && [[ ale -ge age ]]
+then
+	echo "retired"
+	echo "$z years to die"
+else
+	echo "already died"
+fi

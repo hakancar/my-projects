@@ -1,0 +1,25 @@
+#!/bin/bash
+
+read -p "enter first number: " first_number
+read -p "enter second number: " second_number
+
+PS3="Select the operation: "
+select option in add sub mul div exit
+do
+	case $option in
+		add)
+			echo "result=$(($first_number + $second_number))";;
+		sub)
+			echo "result=$(($first_number - $second_number))";;
+		mul)
+			echo "result=$(($first_number * $second_number))";;
+		div)
+			echo "result=(($first_number / $second_number))";;
+		exit)
+			echo "thank you"
+			break
+			;;
+		*)
+			echo "wrong choice, type it again";;
+		esac
+			done

@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Hakan's hands on
+Resources:
+  HakanEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0ab4d1e9cf9a1215a
+      InstanceType: t2.micro
+      KeyName: hakan2
+      SecurityGroups:
+        - SSH-HTTP
+      Tags:
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::StackName} Stack
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #! /bin/bash
+            yum update -y
+            yum install httpd -y
+            FOLDER="https://raw.githubusercontent.com/hakancar/my-projects/main/project101.v2/static-web"
+            cd /var/www/html
+            wget $FOLDER/index.html
+            wget $FOLDER/cat0.jpg
+            wget $FOLDER/cat1.jpg
+            wget $FOLDER/cat2.jpg
+            wget $FOLDER/cat3.png
+            systemctl start httpd
+            systemctl enable httpd

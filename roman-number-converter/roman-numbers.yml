@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  hakan's template
+Parameters:
+  KeyName:
+    Description: Select your valid keypair name
+    Type: AWS::EC2::KeyPair::KeyName
+Resources:
+  SecGr:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: adamsin
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  MyEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c2b8ca1dad447f8a
+      InstanceType: t2.micro
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref SecGr
+      Tags:
+        - Key: Name
+          Value: this is ${AWS::StackName} instance
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install python3 -y
+        pip3 install flask
+        cd /home/ec2-user
+        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/app.py
+        mkdir templates && cd templates
+        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/templates/index.html
+        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/templates/result.html
+        cd ..
+        python3 app.py
+
+Outputs:
+  WebURL:
+    Description: The DNSName of the web server
+    Value: !Sub
+      - http://${orhanemin}
+      - orhanemin: !GetAtt MyEC2.PublicDnsName 
